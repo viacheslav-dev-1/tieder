@@ -50,6 +50,13 @@ export default class Store {
         }
     }
 
+    /**
+     * Get a list of subjects
+     */
+    get subjects() {
+        return this.#subjects
+    }
+
     static #init() {
         const subjects = this.#instance.subjects
         setInterval(() => {
