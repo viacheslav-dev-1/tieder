@@ -1,6 +1,6 @@
 {
   "name": "a-simple-store",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Simple Store manager that is suitable for all front-end applications, but firstly - for javascript vanilla apps",
   "main": "index.js",
   "scripts": {

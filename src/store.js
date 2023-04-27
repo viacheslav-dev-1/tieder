@@ -57,6 +57,14 @@ export default class Store {
         return this.#subjects
     }
 
+    /**
+     * Get a list of subjects filtered by name
+     * @param {*} name Subject name
+     */
+    get(name) {
+        return this.#subjects.filter(s => s.name === name)[0]
+    }
+
     static #init() {
         const subjects = this.#instance.subjects
         setInterval(() => {
