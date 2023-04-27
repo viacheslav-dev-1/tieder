@@ -7,7 +7,6 @@ import Subject from './subject'
 export default class Store {
     static #instance = undefined
     #subjects = []
-    #interval = null
 
     /**
      * Get Instance of Store class
@@ -52,34 +51,34 @@ export default class Store {
     }
 
     static #init() {
-        this.#interval === undefined || this.#interval === null &&
-            (this.#interval = setInterval(() => {
-                this.#subjects.length > 0 && this.#subjects.forEach(it => {
-                    if (!it) {
-                        return
-                    }
+        const subjects = this.#instance.subjects
+        setInterval(() => {
+            subjects.length > 0 && subjects.forEach(it => {
+                if (!it) {
+                    return
+                }
 
-                    let different = false
+                let different = false
 
-                    if (this.#checkIfNotPrimitive(it.prev) && !this.#checkIfNotPrimitive(it.cur)) {
-                        different = true
-                    }
-                    else if (!this.#checkIfNotPrimitive(it.prev) && this.#checkIfNotPrimitive(it.cur)) {
-                        different = true
-                    }
-                    else if (this.#checkIfNotPrimitive(it.prev) && this.#checkIfNotPrimitive(it.cur)) {
-                        different = JSON.stringify(it.prev) !== JSON.stringify(it.cur)
-                    }
-                    else {
-                        different = it.prev !== it.cur
-                    }
+                if (this.#checkIfNotPrimitive(it.prev) && !this.#checkIfNotPrimitive(it.cur)) {
+                    different = true
+                }
+                else if (!this.#checkIfNotPrimitive(it.prev) && this.#checkIfNotPrimitive(it.cur)) {
+                    different = true
+                }
+                else if (this.#checkIfNotPrimitive(it.prev) && this.#checkIfNotPrimitive(it.cur)) {
+                    different = JSON.stringify(it.prev) !== JSON.stringify(it.cur)
+                }
+                else {
+                    different = it.prev !== it.cur
+                }
 
-                    if (different && it.funcs && it.funcs.length > 0) {
-                        it.funcs.forEach(func => func && func(it.prev, it.cur))
-                        it.prev = it.cur
-                    }
-                })
-            }))
+                if (different && it.funcs && it.funcs.length > 0) {
+                    it.funcs.forEach(func => func && func(it.prev, it.cur))
+                    it.prev = it.cur
+                }
+            })
+        })
     }
 
     static #checkIfNotPrimitive(value) {
