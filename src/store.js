@@ -5,14 +5,14 @@ import Subject from './subject'
  * where functions are invoked by checking if subject state is changed
  */
 export default class Store {
-    #instance = undefined
+    static #instance = undefined
     #subjects = []
     #interval = null
-    
+
     /**
      * Get Instance of Store class
      */
-    get instance() {
+    static get instance() {
         if (!this.#instance) {
             this.#instance = new Store()
             this.#init()
