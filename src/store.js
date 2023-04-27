@@ -51,7 +51,7 @@ export default class Store {
         }
     }
 
-    #init() {
+    static #init() {
         this.#interval === undefined || this.#interval === null &&
             (this.#interval = setInterval(() => {
                 this.#subjects.length > 0 && this.#subjects.forEach(it => {
@@ -82,7 +82,7 @@ export default class Store {
             }))
     }
 
-    #checkIfNotPrimitive(value) {
+    static #checkIfNotPrimitive(value) {
         return typeof value === 'object' ||
             typeof value === 'function' ||
             Array.isArray(value)
