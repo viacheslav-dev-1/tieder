@@ -11,7 +11,7 @@ export default class Store {
     /**
      * Get Instance of Store class
      */
-    static get instance() {
+    static get $() {
         if (!this.#instance) {
             this.#instance = new Store()
             this.#init()
@@ -38,6 +38,7 @@ export default class Store {
      * Subscribe to the store by the subject with binded function that invokes only when Subject state is changed
      * @param {*} name name of subject
      * @param {*} func function
+     * @returns {*} Created or modified subject
      */
     sub(name, func) {
         const subject = this.#subjects.filter(s => s.name === name)[0]
@@ -48,6 +49,15 @@ export default class Store {
         } else {
             subject.funcs.push(func)
         }
+        return subject
+    }
+
+    /**
+     * Unsubscribe from the store. It removes the subject with all binded functions from store interval
+     * @param {*} subject Subject object
+     */
+    unsub(subject) {
+        this.#subjects = this.#subjects.filter(s => s.name !== subject.name)
     }
 
     /**
