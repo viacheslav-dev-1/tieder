@@ -1,4 +1,6 @@
 import Subject from './subject'
+import StoreFunc from './store-func'
+import Subscription from './subscription'
 
 /**
  * Store management class. It contains a lifecycle - a simple javascript interval
@@ -9,7 +11,8 @@ export default class Store {
     #subjects = []
 
     /**
-     * Get Instance of Store class
+     * Gets Instance of Store class
+     * @returns {Store} Store instance
      */
     static get $() {
         if (!this.#instance) {
@@ -21,9 +24,9 @@ export default class Store {
     }
 
     /**
-     * Change the state of subject
-     * @param {*} name name of subject
-     * @param {*} value value to set
+     * Changes the state of subject
+     * @param {String} name name of subject
+     * @param {Object} value value to set
      */
     mut(name, value) {
         const subject = this.#subjects.filter(s => s.name === name)[0]
@@ -35,44 +38,55 @@ export default class Store {
     }
 
     /**
-     * Subscribe to the store by the subject with binded function that invokes only when Subject state is changed
-     * @param {*} name name of subject
-     * @param {*} func function
-     * @returns {*} Created or modified subject
+     * Subscribes to the store pipeline. This method adds a function to the subject. Function invokes when state of subject is changed.
+     * @param {String} name name of subject
+     * @param {Function} func function
+     * @returns {Subscription} Created or modified subject
      */
     sub(name, func) {
         const subject = this.#subjects.filter(s => s.name === name)[0]
+        const storeFunc = new StoreFunc(func)
         if (!subject) {
             const sub = new Subject(name, null)
-            sub.funcs.push(func)
+            sub.funcs.push(storeFunc)
             this.#subjects.push(sub)
         } else {
-            subject.funcs.push(func)
+            subject.funcs.push(storeFunc)
         }
-        return subject
+        return new Subscription(name, storeFunc)
     }
 
     /**
-     * Unsubscribe from the store. It removes the subject with all binded functions from store interval
-     * @param {*} subject Subject object
+     * Unsubscribes target subscription from the store pipeline
+     * @param {Subscription} subscription Subscription object that contains subject name and binded function
      */
-    unsub(subject) {
-        this.#subjects = this.#subjects.filter(s => s.name !== subject.name)
+    unsub(subscription) {
+        const target = this.#subjects.find(it => it.name === subscription.name)
+        target.funcs = target.funcs.filter(it => it.id !== subscription.func.id)
     }
 
     /**
-     * Get a list of subjects
+     * Destroys subject by its name - removes the subject with all binded function from the store pipeline
+     * @param {String} name Subject name
+     */
+    destroy(name) {
+        this.#subjects = this.#subjects.filter(s => s.name !== name)
+    }
+
+    /**
+     * Gets a list of subjects
      */
     get subjects() {
         return this.#subjects
     }
 
     /**
-     * Get a list of subjects filtered by name
-     * @param {*} name Subject name
+     * Gets a subject by its name
+     * @param {String} name Subject name
+     * @returns {Subject} Subject object
      */
     get(name) {
-        return this.#subjects.filter(s => s.name === name)[0]
+        return this.#subjects.find(s => s.name === name)
     }
 
     static #init() {
@@ -99,7 +113,23 @@ export default class Store {
                 }
 
                 if (different && it.funcs && it.funcs.length > 0) {
-                    it.funcs.forEach(func => func && func(it.prev, it.cur))
+                    it.funcs.forEach(func => {
+                        if (func && func.id && func.func) {
+                            try {
+                                func.func(it.prev, it.cur)
+                                if (func.error) {
+                                    func.error = undefined
+                                    func.errorChecked = false
+                                }
+                            } catch (e) {
+                                if (!func.errorChecked) {
+                                    func.error = e
+                                    func.errorChecked = true
+                                    console.error(`Error occured in subject "${it?.name}":`, e)
+                                }
+                            }
+                        }
+                    })
                     it.prev = it.cur
                 }
             })

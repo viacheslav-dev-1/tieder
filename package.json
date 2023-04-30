@@ -1,6 +1,6 @@
 {
   "name": "a-simple-store",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Simple Store manager that is suitable for all front-end applications, but firstly - for javascript vanilla apps",
   "main": "index.js",
   "scripts": {
@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/viacheslav-dev-1/simple-store/issues"
   },
-  "homepage": "https://github.com/viacheslav-dev-1/simple-store#readme"
+  "homepage": "https://github.com/viacheslav-dev-1/simple-store#readme",
+  "dependencies": {
+    "uuid": "^9.0.0"
+  }
 }

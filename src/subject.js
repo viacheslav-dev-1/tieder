@@ -27,8 +27,8 @@ export default class Subject {
 
     /**
      * Constructor
-     * @param {*} name Subject name
-     * @param {*} value Subject current value
+     * @param {String} name Subject name
+     * @param {Object} value Subject current value
      */
     constructor(name, value) {
         this.name = name

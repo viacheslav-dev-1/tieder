@@ -1,4 +1,49 @@
 import Store from "./store";
 import Subject from "./subject";
+import Subscription from "./subscription";
 
-export { Store, Subject }
+/**
+* Changes the state of subject
+* @param {String} name name of subject
+* @param {Object} value value to set
+*/
+export function mut(name, value) {
+    Store.$.mut(name, value)
+}
+
+/**
+* Subscribes to the store pipeline. This method adds a function to the subject. Function invokes when state of subject is changed.
+* @param {String} name name of subject
+* @param {Function} func function
+* @returns {Subscription} Created or modified subject
+*/
+export function sub(name, func) {
+    return Store.$.sub(name, func)
+}
+
+/**
+* Unsubscribes target subscription from the store pipeline
+* @param {Subscription} subscription Subscription object that contains subject name and binded function
+*/
+export function unsub(subscription) {
+    Store.$.unsub(subscription)
+}
+
+/**
+* Destroys subject by its name - removes the subject with all binded function from the store pipeline
+* @param {String} name Subject name
+*/
+export function destroy(name) {
+    Store.$.destroy(name)
+}
+
+/**
+* Gets a subject by its name
+* @param {String} name Subject name
+* @returns {Subject} Subject object
+*/
+export function subject(name) {
+    return Store.$.get(name)
+}
+
+export { Subject, Subscription }
