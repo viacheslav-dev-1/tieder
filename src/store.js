@@ -29,6 +29,11 @@ export default class Store {
      * @param {Object} value value to set
      */
     mut(name, value) {
+        if (this.#isBlank(name)) {
+            console.error('Subject name should not be empty')
+            return
+        }
+
         const subject = this.#subjects.filter(s => s.name === name)[0]
         if (!subject) {
             this.#subjects.push(new Subject(name, value))
@@ -44,6 +49,11 @@ export default class Store {
      * @returns {Subscription} Created or modified subject
      */
     sub(name, func) {
+        if (this.#isBlank(name)) {
+            console.error('Subject name should not be empty')
+            return
+        }
+
         const subject = this.#subjects.filter(s => s.name === name)[0]
         const storeFunc = new StoreFunc(func)
         if (!subject) {
@@ -61,6 +71,11 @@ export default class Store {
      * @param {Subscription} subscription Subscription object that contains subject name and binded function
      */
     unsub(subscription) {
+        if (subscription === undefined || subscription === null || this.#isBlank(subscription?.name) || !subscription?.func) {
+            console.error('Subscription cannot be null or undefined or have empty name or be without function')
+            return
+        }
+
         const target = this.#subjects.find(it => it.name === subscription.name)
         target.funcs = target.funcs.filter(it => it.id !== subscription.func.id)
     }
@@ -70,6 +85,11 @@ export default class Store {
      * @param {String} name Subject name
      */
     destroy(name) {
+        if (this.#isBlank(name)) {
+            console.error('Subject name should not be empty')
+            return
+        }
+
         this.#subjects = this.#subjects.filter(s => s.name !== name)
     }
 
@@ -86,6 +106,11 @@ export default class Store {
      * @returns {Subject} Subject object
      */
     get(name) {
+        if (this.#isBlank(name)) {
+            console.error('Subject name should not be empty')
+            return
+        }
+
         return this.#subjects.find(s => s.name === name)
     }
 
@@ -125,7 +150,7 @@ export default class Store {
                                 if (!func.errorChecked) {
                                     func.error = e
                                     func.errorChecked = true
-                                    console.error(`Error occured in subject "${it?.name}":`, e)
+                                    console.error(`Error occured in subject "${it.name}":`, e)
                                 }
                             }
                         }
@@ -140,5 +165,9 @@ export default class Store {
         return typeof value === 'object' ||
             typeof value === 'function' ||
             Array.isArray(value)
+    }
+
+    #isBlank(str) {
+        return (!str || /^\s*$/.test(str))
     }
 }
