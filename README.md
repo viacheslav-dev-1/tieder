@@ -3,7 +3,7 @@ This is a Simple Store manager that is suitable for all front-end applications, 
 
 <h3>How to use</h3>
 
-1. Let's take a look at a common example - clicking of button that leads to text appearing on some page. In the following code snippet we mutate our state with new data:
+1. Let's take a look at common example - clicking on button that leads to text appearing on some page. In the following code snippet we mutate our state with new data:
 ```javascript
 const usernameField = document.getElementById('usernameField');
 const submitBtn = document.getElementById('submitBtn');
