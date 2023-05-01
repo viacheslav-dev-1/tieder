@@ -1,13 +1,13 @@
 {
   "name": "a-simple-store",
-  "version": "2.0.3",
+  "version": "2.0.9",
   "description": "A Simple Store manager that is suitable for javascript frontend applications",
   "main": "dist/a-simple-store.cjs.js",
   "module": "dist/a-simple-store.esm.js",
   "browser": "dist/a-simple-store.umd.js",
   "scripts": {
     "build": "rollup -c",
-    "pretest": "npm run build"
+    "publish": "npm run build && npm publish"
   },
   "repository": {
     "type": "git",

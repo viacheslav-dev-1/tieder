@@ -1,3 +1,5 @@
+import StoreFunc from "./store-func"
+
 /**
  * Subscription class represents the object that contains a subject name and current binded function
  */
@@ -8,7 +10,7 @@ export default class Subscription {
     /**
      * Constructor
      * @param {String} name Subject name
-     * @param {Function} func Binded function
+     * @param {StoreFunc} func Binded function
      */
     constructor(name, func) {
         this.#name = name
@@ -25,7 +27,7 @@ export default class Subscription {
 
     /**
      * Gets binded function
-     * @returns {Function} Binded function
+     * @returns {StoreFunc} Binded function
      */
     get func() {
         return this.#func

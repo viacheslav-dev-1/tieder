@@ -46,4 +46,12 @@ export function subject(name) {
     return Store.$.get(name)
 }
 
+/**
+* Stops the store pipeline - clears and stops the interval
+* @param {Boolean} clearSubjects Flag that determine remove subjects from pipeline or not
+*/
+export function stop(clearSubjects) {
+    Store.$.stop(clearSubjects)
+}
+
 export { Subject, Subscription }

@@ -8,7 +8,9 @@ import Subscription from './subscription'
  */
 export default class Store {
     static #instance = undefined
+    #interval = undefined
     #subjects = []
+    #changedSubjects = []
 
     /**
      * Gets Instance of Store class
@@ -18,8 +20,10 @@ export default class Store {
         if (!this.#instance) {
             this.#instance = new Store()
             this.#init()
+        } else {
+            this.#instance.interval || this.#init()
         }
-
+        
         return this.#instance
     }
 
@@ -34,11 +38,14 @@ export default class Store {
             return
         }
 
-        const subject = this.#subjects.filter(s => s.name === name)[0]
+        const subject = this.#subjects.find(s => s.name === name)
         if (!subject) {
-            this.#subjects.push(new Subject(name, value))
+            const newSubject = new Subject(name, value)
+            this.#subjects.push(newSubject)
+            this.#changedSubjects.push(newSubject)
         } else {
             subject.cur = value
+            this.#isChanged(subject.prev, value) && this.#changedSubjects.push(subject)
         }
     }
 
@@ -54,7 +61,7 @@ export default class Store {
             return
         }
 
-        const subject = this.#subjects.filter(s => s.name === name)[0]
+        const subject = this.#subjects.find(s => s.name === name)
         const storeFunc = new StoreFunc(func)
         if (!subject) {
             const sub = new Subject(name, null)
@@ -76,8 +83,8 @@ export default class Store {
             return
         }
 
-        const target = this.#subjects.find(it => it.name === subscription.name)
-        target.funcs = target.funcs.filter(it => it.id !== subscription.func.id)
+        this.#removeFromArray(this.#subjects.find(it => it.name === subscription.name)?.funcs, f => f.id === subscription.func.id)
+        this.#removeFromArray(this.#changedSubjects.find(it => it.name === subscription.name)?.funcs, f => f.id === subscription.func.id)
     }
 
     /**
@@ -90,14 +97,8 @@ export default class Store {
             return
         }
 
-        this.#subjects = this.#subjects.filter(s => s.name !== name)
-    }
-
-    /**
-     * Gets a list of subjects
-     */
-    get subjects() {
-        return this.#subjects
+        this.#removeFromArray(this.#subjects, s => s.name === name)
+        this.#removeFromArray(this.#changedSubjects, s => s.name === name)
     }
 
     /**
@@ -114,30 +115,23 @@ export default class Store {
         return this.#subjects.find(s => s.name === name)
     }
 
+    /**
+     * Stops the store pipeline - clears and stops the interval. If any Simple Store method is called - the interval starts again
+     * @param {Boolean} clearSubjects Flag that determine remove subjects from pipeline or not
+     */
+    stop(clearSubjects) {
+        this.interval && clearInterval(this.interval)
+        clearSubjects && (this.#subjects = [])
+        clearSubjects && (this.#changedSubjects = [])
+        this.#interval = undefined
+    }
+
     static #init() {
-        const subjects = this.#instance.subjects
-        setInterval(() => {
+        const subjects = this.#instance.changedSubjects
+        this.#instance.interval = setInterval(() => {
             subjects.length > 0 && subjects.forEach(it => {
-                if (!it) {
-                    return
-                }
-
-                let different = false
-
-                if (this.#checkIfNotPrimitive(it.prev) && !this.#checkIfNotPrimitive(it.cur)) {
-                    different = true
-                }
-                else if (!this.#checkIfNotPrimitive(it.prev) && this.#checkIfNotPrimitive(it.cur)) {
-                    different = true
-                }
-                else if (this.#checkIfNotPrimitive(it.prev) && this.#checkIfNotPrimitive(it.cur)) {
-                    different = JSON.stringify(it.prev) !== JSON.stringify(it.cur)
-                }
-                else {
-                    different = it.prev !== it.cur
-                }
-
-                if (different && it.funcs && it.funcs.length > 0) {
+                if (!it) return
+                if (it.funcs && it.funcs.length > 0) {
                     it.funcs.forEach(func => {
                         if (func && func.id && func.func) {
                             try {
@@ -157,11 +151,55 @@ export default class Store {
                     })
                     it.prev = it.cur
                 }
+
+                this.#instance.changedSubjects.pop()
             })
         })
     }
 
-    static #checkIfNotPrimitive(value) {
+    /* SINGLETONE MEMBERS */
+
+    get changedSubjects() {
+        return this.#changedSubjects
+    }
+
+    get interval() {
+        return this.#interval
+    }
+
+    set interval(value) {
+        this.#interval = value
+    }
+
+    /* PRIVATE MEMBERS */
+
+    #removeFromArray(array, predicate) {
+        if (array && array.length > 0) {
+            const index = this.array.findIndex(predicate)
+            index > -1 && array.splice(index, 1)
+        }
+    }
+
+    #isChanged(prev, cur) {
+        let different = false
+
+        if (this.#checkIfNotPrimitive(prev) && !this.#checkIfNotPrimitive(cur)) {
+            different = true
+        }
+        else if (!this.#checkIfNotPrimitive(prev) && this.#checkIfNotPrimitive(cur)) {
+            different = true
+        }
+        else if (this.#checkIfNotPrimitive(prev) && this.#checkIfNotPrimitive(cur)) {
+            different = JSON.stringify(prev) !== JSON.stringify(cur)
+        }
+        else {
+            different = prev !== cur
+        }
+
+        return different
+    }
+
+    #checkIfNotPrimitive(value) {
         return typeof value === 'object' ||
             typeof value === 'function' ||
             Array.isArray(value)
