@@ -8,7 +8,7 @@ To install the library - type in your terminal the following:
 npm i a-simple-store
 ```
 <h3>Description</h3>
-This library covers a functionality of general store. It means that in one place object state is changed, in another this changing is tracked by subscription.
+This library covers a general store functionality. It means that in one place object state is changed, in another - this changing is tracked by subscription.
 There are 5 main methods you can use to effectively manage the object state:
 
 <h4>1. Mut</h4>
@@ -16,13 +16,13 @@ There are 5 main methods you can use to effectively manage the object state:
 <hr>
 
 ```javascript
-import { mut } from 'a-simple-store/src/index;
+import { mut } from 'a-simple-store'
 ```
-<b>What does</b><hr>
-Changes the state of the object. Here object - it's a wrapper called Subject and contains previous, current states and the binded function.
+<b>Description</b><hr>
+Changes (mutates) the state of the object. Here object - it's a wrapper called Subject and contains previous, current states and the binded function.
 
 <b>Example</b><hr>
-Let's take a look at common example - clicking on button that leads to text appearing on some page. In the following code snippet we mutate our state with new data:
+Let's take a look at a common example - clicking on submit button to show the user name on the page. In the following code snippet we mutate our state with new data:
 
 ```javascript
 const usernameField = document.getElementById('usernameField');
@@ -36,13 +36,13 @@ submitBtn.addEventListener('click', () => {
 <hr>
 
 ```javascript
-import { sub } from 'a-simple-store/src/index;
+import { sub } from 'a-simple-store'
 ```
-<b>What does</b><hr>
+<b>Description</b><hr>
 Subscribes the object to the store pipeline. This method adds a function to the subject. Function invokes when state of subject is changed.
 
 <b>Example</b><hr>
-In the first example we changed the state by clicking on the submit button. Now we want to track our changes and render them. So to show the username somewhere on the screen let's subscribe:
+In the first example we changed the state by clicking on the submit button. Now we want to track our changes and render user name. So to show the username somewhere on the screen let's subscribe:
 
 ```javascript
 const header = document.querySelector('header .hello-container');
@@ -58,9 +58,9 @@ As you can see we save our subscription to the variable. This is will be used in
 <hr>
 
 ```javascript
-import { unsub } from 'a-simple-store/src/index;
+import { unsub } from 'a-simple-store'
 ```
-<b>What does</b><hr>
+<b>Description</b><hr>
 Unsubscribes target subscription from the store pipeline. Removes a function saved in the Subscription object.
 
 <b>Example</b><hr>
@@ -81,9 +81,9 @@ As you can see, here we used out saved subscription object. This is needed for s
 <hr>
 
 ```javascript
-import { destroy } from 'a-simple-store/src/index;
+import { destroy } from 'a-simple-store'
 ```
-<b>What does</b><hr>
+<b>Description</b><hr>
 Destroys subject by its name - removes the subject with all binded function from the store pipeline
 
 <b>Example</b><hr>
@@ -101,13 +101,13 @@ closeBtn.addEventListener('click', () => {
 <hr>
 
 ```javascript
-import { subject } from 'a-simple-store/src/index;
+import { subject } from 'a-simple-store'
 ```
-<b>What does</b><hr>
+<b>Description</b><hr>
 Gets a subject by its name
 
 <b>Example</b><hr>
-It often happens when we just want to get the current value of the subject for some purposes. Moreover if we don't use sub/unsub functionality - just for saving the data that must be accessible through whole app - we need the simple way to know the subject data. So we can use subject method to retrieve this information:
+It often happens when we want to get the current value of the subject for some purposes. Moreover if we don't use sub/unsub functionality - just for saving the data that must be accessible through whole app - we need a simple way to know the subject data. So we can use subject method to retrieve this information:
 
 ```javascript
 const username = subject('username')?.cur

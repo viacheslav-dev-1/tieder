@@ -1,6 +1,6 @@
 {
   "name": "a-simple-store",
-  "version": "2.0.0",
+  "version": "2.0.3",
   "description": "A Simple Store manager that is suitable for javascript frontend applications",
   "main": "dist/a-simple-store.cjs.js",
   "module": "dist/a-simple-store.esm.js",
@@ -30,6 +30,18 @@
     "dist",
     "src"
   ],
+  "exports": {
+    ".": {
+      "browser": {
+        "import": "./dist/a-simple-store.esm.js",
+        "require": "./dist/a-simple-store.cjs.js"
+      },
+      "node": {
+        "require": "./dist/a-simple-store.cjs.js"
+      },
+      "default": "./dist/a-simple-store.esm.js"
+    }
+  },
   "dependencies": {
     "uuid": "^9.0.0"
   },
