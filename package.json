@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/viacheslav-dev-1/simple-store.git"
+    "url": "git+https://github.com/viacheslav-dev-1/tieder.git"
   },
   "keywords": [
     "store",
@@ -23,9 +23,9 @@
   "author": " <bviacheslav.12@gmail.com>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/viacheslav-dev-1/simple-store/issues"
+    "url": "https://github.com/viacheslav-dev-1/tieder/issues"
   },
-  "homepage": "https://github.com/viacheslav-dev-1/simple-store#readme",
+  "homepage": "https://github.com/viacheslav-dev-1/tieder#readme",
   "files": [
     "dist",
     "src"
