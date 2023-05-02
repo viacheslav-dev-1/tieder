@@ -129,6 +129,6 @@ import { stop } from 'tieder'
 
 <h5>Description</h5>
 Stops and clears the pipeline interval. After this none of created Subjects will be tracked.
-
+<hr>
 Store manager does not need special initialization, because it's a singletone and it's initialized automatically.<br>
 Store also works with complicated objects such as arrays, classes, functions etc.
