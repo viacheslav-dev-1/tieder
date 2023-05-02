@@ -23,14 +23,14 @@ export function sub(name, func) {
 
 /**
 * Unsubscribes target subscription from the store pipeline
-* @param {Subscription} subscription Subscription object that contains subject name and binded function
+* @param {Subscription} subscription Subscription object that contains subject name and a callback function
 */
 export function unsub(subscription) {
     Store.$.unsub(subscription)
 }
 
 /**
-* Destroys subject by its name - removes the subject with all binded function from the store pipeline
+* Destroys subject by its name - removes the subject with all callback functions from the store pipeline
 * @param {String} name Subject name
 */
 export function destroy(name) {

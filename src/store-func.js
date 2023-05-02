@@ -10,7 +10,7 @@ export default class StoreFunc {
 
     /**
      * Constructor
-     * @param {Function} func Binded function
+     * @param {Function} func Callback function
      */
     constructor(func) {
         this.#id = uuidv4()

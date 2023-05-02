@@ -1,7 +1,7 @@
 import StoreFunc from "./store-func"
 
 /**
- * Subscription class represents the object that contains a subject name and current binded function
+ * Subscription class represents the object that contains a subject name and current tied function
  */
 export default class Subscription {
     #name = ''
@@ -10,7 +10,7 @@ export default class Subscription {
     /**
      * Constructor
      * @param {String} name Subject name
-     * @param {StoreFunc} func Binded function
+     * @param {StoreFunc} func Tied function
      */
     constructor(name, func) {
         this.#name = name
@@ -26,8 +26,8 @@ export default class Subscription {
     }
 
     /**
-     * Gets binded function
-     * @returns {StoreFunc} Binded function
+     * Gets tied function
+     * @returns {StoreFunc} Tied function
      */
     get func() {
         return this.#func

@@ -7,7 +7,7 @@ export default [
     {
         input: "src/index.js",
         output: {
-            name: "a-simple-store",
+            name: "tieder",
             file: pkg.browser,
             format: "umd",
         },

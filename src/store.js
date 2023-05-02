@@ -23,7 +23,7 @@ export default class Store {
         } else {
             this.#instance.interval || this.#init()
         }
-        
+
         return this.#instance
     }
 
@@ -75,7 +75,7 @@ export default class Store {
 
     /**
      * Unsubscribes target subscription from the store pipeline
-     * @param {Subscription} subscription Subscription object that contains subject name and binded function
+     * @param {Subscription} subscription Subscription object that contains subject name and callback function
      */
     unsub(subscription) {
         if (subscription === undefined || subscription === null || this.#isBlank(subscription?.name) || !subscription?.func) {
@@ -84,11 +84,10 @@ export default class Store {
         }
 
         this.#removeFromArray(this.#subjects.find(it => it.name === subscription.name)?.funcs, f => f.id === subscription.func.id)
-        this.#removeFromArray(this.#changedSubjects.find(it => it.name === subscription.name)?.funcs, f => f.id === subscription.func.id)
     }
 
     /**
-     * Destroys subject by its name - removes the subject with all binded function from the store pipeline
+     * Destroys subject by its name - removes the subject with all callback functions from the store pipeline
      * @param {String} name Subject name
      */
     destroy(name) {
@@ -175,7 +174,7 @@ export default class Store {
 
     #removeFromArray(array, predicate) {
         if (array && array.length > 0) {
-            const index = this.array.findIndex(predicate)
+            const index = array.findIndex(predicate)
             index > -1 && array.splice(index, 1)
         }
     }

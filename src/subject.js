@@ -2,8 +2,8 @@ import StoreFunc from "./store-func"
 
 /**
  * The special object that has two states: previous and next.
- * Functions binded to this object will be invoked into the store lifecycle.
- * Each subject must have it's name, each binded function should have their names too
+ * Functions tied to this object will be invoked into the store lifecycle.
+ * Each subject must have it's name, each tied callback function should have their names too
  * easily remove them from store lifecycle.
  */
 export default class Subject {
@@ -71,16 +71,16 @@ export default class Subject {
     }
 
     /**
-     * Gets a list of binded store functions
-     * @returns {StoreFunc[]} List of binded store functions
+     * Gets a list of tied store functions
+     * @returns {StoreFunc[]} List of tied store functions
      */
     get funcs() {
         return this.#funcs
     }
 
     /**
-     * Gets a list of binded store functions
-     * @param {StoreFunc[]} value List of binded store functions
+     * Gets a list of tied store functions
+     * @param {StoreFunc[]} value List of tied store functions
      */
     set funcs(value) {
         this.#funcs = value
